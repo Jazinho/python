@@ -85,44 +85,27 @@ drawing={
              "/ \     "]
         }
 
-window = tkinter.Tk()
-window.geometry('400x500')
-window.title('Gra Wisielec')
+def after_game():
+    again = tkinter.Button(window, text='Play again!',command=lambda: new_game())
+    again.pack()
+    finish = tkinter.Button(window, text='Exit program.',command= lambda: window.destroy())
+    finish.pack()
 
-pom = tkinter.Label(window, text='')
-pom.pack()
-
-lbl = tkinter.Label(window, text='Wybierz poziom trudności:\n')
-
-pom2 = tkinter.Label(window, text='')
-pom2.pack()
-
-glob_label = tkinter.Label(window, text=' \n\n\n\n\n\n\n\n')
-glob_label.pack()
-lbl.pack()
-
-def disp_lbls():
-    but = tkinter.Button(window, text='Start!',command=lambda: start())
-    but.pack()
-
-lvl=0
-guesses=1
-haslo = ''
-slowo = ''
-guessed_letters=''
-game_on = True
+def new_game():
+    window.destroy()
+    setup()
 
 def set_level(num):
     global lvl
-    global haslo
+    global wyswietlane_haslo
     global slowo
     lvl = num
     choice1.destroy()
     choice2.destroy()
     choice3.destroy()
-    slowo = lines[(lvl-1)*4+rand]
-    haslo = '_ ' *((2*lvl)+2)
-    lbl.configure(text = haslo, font=('Helvetica',16))
+    slowo = lines_from_file[(lvl-1)*4+rand]
+    wyswietlane_haslo = '_ ' *((2*lvl)+2)
+    lbl.configure(text = wyswietlane_haslo, font=('Helvetica',16))
     entry.pack()
     but.pack()
     wprow_lab.pack()
@@ -141,9 +124,13 @@ def draw(num):
 def start():
     global guesses
     global wprow
-    global haslo
+    global wyswietlane_haslo
     global guessed_letters
     global game_on
+    global step_to_death
+    global wprow
+    
+#Read entry and check if it's in solutions string
     
     char = entry.get()
     entry.delete(0)
@@ -151,50 +138,116 @@ def start():
     wprow = wprow + ' ' + str(char)
     wprow_lab.configure(text = wprow)
 
-    haslo=''
+    wyswietlane_haslo=''
     for letter in slowo:
+        if char == letter:
+            step_to_death=False
         if char == letter or letter in guessed_letters:
-            haslo = haslo + letter + ' '
+            wyswietlane_haslo = wyswietlane_haslo + letter + ' '
         else:
             if letter != '\n':
-                haslo = haslo + '_ '
+                wyswietlane_haslo = wyswietlane_haslo + '_ '
                 game_on = True
                 
-    lbl.configure(text = haslo)
-    
-    draw(guesses)
+    lbl.configure(text = wyswietlane_haslo)
 
     if not game_on:
         info.configure(text='***** WYGRAŁEŚ *****\n* URATOWAŁEŚ WIEŚKA *')
         entry.destroy()
         but.destroy()
-        window.quit()
+        after_game()
+        
+#Draw next step only if user guessed wrong
+    if step_to_death:
+        guesses+=1
+
+    draw(guesses)
 
     game_on = False
-    guesses+=1
-    if(guesses==11):
+    step_to_death = True
+    
+    if(guesses==9):
         info.configure(text='*** PRZEGRAŁEŚ ***\n* WIESIEK ZAWISŁ *')
         entry.destroy()
         but.destroy()
+        after_game()
 
-choice1 = tkinter.Button(window, text='Łatwy',command=lambda: set_level(1))
-choice1.pack()
-choice2 = tkinter.Button(window, text='Średni',command=lambda: set_level(2))
-choice2.pack()
-choice3 = tkinter.Button(window, text='Trudny',command=lambda: set_level(3))
-choice3.pack()
+def setup():
+    global lvl
+    global guesses
+    global wyswietlane_haslo
+    global slowo
+    global guessed_letters
+    global game_on
+    global step_to_death
+    global choice1
+    global choice2
+    global choice3
+    global window
+    global lines_from_file
+    global rand
+    global lbl
+    global glob_label
+    global but
+    global info
+    global entry
+    global wprow
+    global wprow_lab
+    
+    lvl=0
+    guesses=0
+    wyswietlane_haslo = ''
+    slowo = ''
+    guessed_letters=''
+    game_on = True
+    step_to_death=True
 
-f=open('Base.txt','r')
-lines = f.readlines()
-random.seed()
-rand = random.randint(0,3)
+    window = tkinter.Tk()
+    choice1 = tkinter.Button(window, text='Łatwy',command=lambda: set_level(1))
+    choice2 = tkinter.Button(window, text='Średni',command=lambda: set_level(2))
+    choice3 = tkinter.Button(window, text='Trudny',command=lambda: set_level(3))
+    window.geometry('400x500')
+    window.title('Gra Wisielec')
 
-info = tkinter.Label(window, text='\nZgadnij jaka litera znajduje sie w słowie-rozwiązaniu.\nKażda kolejna próba to krok do śmierci wisielca...')
-info.pack()
+    pom = tkinter.Label(window, text='')
+    pom.pack()
 
-entry = tkinter.Entry(window)
-but = tkinter.Button(window, text='Check!',command=lambda: start())
-wprow = 'Sprawdzono: '
-wprow_lab = tkinter.Label(window, text=wprow)
+    lbl = tkinter.Label(window, text='Wybierz poziom trudności:\n')
 
-window.mainloop()
+    pom2 = tkinter.Label(window, text='')
+    pom2.pack()
+
+    glob_label = tkinter.Label(window, text=' \n\n\n\n\n\n\n\n')
+    glob_label.pack()
+    lbl.pack()
+
+    choice1.pack()
+    choice2.pack()
+    choice3.pack()
+
+    f=open('Base.txt','r')
+    lines_from_file = f.readlines()
+    random.seed()
+    rand = random.randint(0,3)
+
+    info = tkinter.Label(window, text='\nZgadnij jaka litera znajduje sie w słowie-rozwiązaniu.\nKażda kolejna nietrafiona próba to krok do śmierci wisielca...')
+    info.pack()
+
+    entry = tkinter.Entry(window)
+    but = tkinter.Button(window, text='Check!',command=lambda: start())
+    wprow = 'Sprawdzono: '
+    wprow_lab = tkinter.Label(window, text=wprow)
+
+    window.mainloop()
+
+#global variables and starting program
+lines_from_file=''
+lvl=0
+guesses=0
+wyswietlane_haslo = ''
+slowo = ''
+guessed_letters=''
+game_on = True
+step_to_death=True
+
+setup()
