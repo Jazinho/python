@@ -1,6 +1,7 @@
 import re
 import os.path
 import hashlib
+import getpass
 
 pattern = re.compile('[A-Z][a-z]')
 
@@ -35,14 +36,14 @@ while(True):
     validate_user = False
     
     login = input('Login: ')
-    old_pwd = input('Password: ')
+    old_pwd = getpass.getpass('Password: ')
 
     for line in lines:
         if login+','+hashlib.md5(old_pwd.encode('utf-8')).hexdigest()+'\n' == line:
             validate_user = True
             if decision == 'c':
-                new_pwd = input('New password: ')
-                new_pwd2 = input('Retype new password: ')
+                new_pwd = getpass.getpass('New password: ')
+                new_pwd2 = getpass.getpass('Retype new password: ')
                 if new_pwd == new_pwd2:
                     if pattern.findall(new_pwd) and len(new_pwd)>7:
                         f.write(login+','+hashlib.md5(new_pwd.encode('utf-8')).hexdigest()+'\n')
