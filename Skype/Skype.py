@@ -28,5 +28,6 @@ for con in contacts:
     con_but.pack()
 
 job.pack()
+window.mainloop()
 
 
