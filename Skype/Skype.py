@@ -9,9 +9,11 @@ for i in range(int(number)):
 
 window = tkinter.Tk()
 window.title('Skype')
-window.geometry('300x400')
+window.geometry('400x400')
 window.configure(background='sky blue')
 window.wm_iconbitmap('skype.ico')
+scrollbar = tkinter.Scrollbar(window, orient=tkinter.VERTICAL)
+scrollbar.pack(side = tkinter.RIGHT, fill=tkinter.Y)
 
 job = tkinter.Label(window, text='\nStaying lazy...',fg='white',bg='sky blue',font=('Helvetica',14))
 
