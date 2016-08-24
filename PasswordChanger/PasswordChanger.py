@@ -1,5 +1,6 @@
 import re
 import os.path
+import hashlib
 
 pattern = re.compile('[A-Z][a-z]')
 
@@ -37,14 +38,14 @@ while(True):
     old_pwd = input('Password: ')
 
     for line in lines:
-        if login+','+old_pwd+'\n' == line:
+        if login+','+hashlib.md5(old_pwd.encode('utf-8')).hexdigest()+'\n' == line:
             validate_user = True
             if decision == 'c':
                 new_pwd = input('New password: ')
                 new_pwd2 = input('Retype new password: ')
                 if new_pwd == new_pwd2:
                     if pattern.findall(new_pwd) and len(new_pwd)>7:
-                        f.write(login+','+new_pwd+'\n')
+                        f.write(login+','+hashlib.md5(new_pwd.encode('utf-8')).hexdigest()+'\n')
                         changed = True
                         continue
                     else:
@@ -70,7 +71,7 @@ while(True):
         print('Given user doesn\'t exists!')
     elif not found_user and decision=='n':
         if pattern.findall(old_pwd) and len(old_pwd)>7:
-            f.write(str(login)+','+str(old_pwd)+'\n')
+            f.write(str(login)+','+hashlib.md5(old_pwd.encode('utf-8')).hexdigest()+'\n')
             print('Succesfully added new user!')
         else:
             print('Adding new user failed. Not valid password!')
