@@ -2,31 +2,33 @@ import tkinter
 import os
 from pygame import mixer
 from PIL import Image,ImageTk
+from Question import *
+from Possibilities import possibilities                
 
-possibilities = {'Holly Dolly':['Polka Song','Kanikuly','Merci','Holly Dolly'],
-                 'Billie Jean':['Thriller', 'Billie Jean', 'Come On', 'Infinity'],
-                 'Scenariusz Dla Moich Sasiadow':['Scenariusz Dla Moich Sasiadow', 'Serce Me', 'Historia Jednej Znajomosci', 'Czerwona Sukienka'],
-                 'Beds Are Burning':['Friend in Deed' ,'Sour Love','Beds Are Burning', 'Dark Time'],
-                 'We Built This City':['Geronimo\'s Cadillac','War Machine','Brother Louie' ,'We Built This City'],
-                 'Espanol':['Espanol', 'Papa\'s Got a New Pigbag', 'El Mismo Sol', 'Bailar'],
-                 'Hit That':['Thunderstruck','Hit That', 'Defy You', 'What Happened to You'],
-                 'Perry Manson Theme':['Pixelated', 'Think', 'Perry Manson Theme', 'Inspector Harry'],
-                 'Pixelated':['Still with You', 'Stay with Me Babe','Mama Said','Pixelated'],
-                 'Propaganda':['Big Baton', 'Luźny Łan', 'Burza w Porcie Winczeston','Propaganda'],
-                 'Roll With It':['Roll With It', 'Little by Little', 'Stand by Me','Story of me']
-                }
+def replay_song(question):
+    mixer.music.load('probes/'+question.level+question.title+'.mp3')
+    mixer.music.play()
 
+def play_song(question):
+    if question.level == "easy/":
+        level_tab.configure(text = "Level: Easy\n")
+    else:
+        level_tab.configure(text = "Level: Hard\n")
+    mixer.music.load(Question.path + question.level + question.title + '.mp3')
+    mixer.music.play()
+    retry_but.configure(command = lambda: replay_song(question))
+    show_buttons(question.title)
+    
 def show_buttons(played_song):
-    global possibilities
     global ans0
     global ans1
     global ans2
     global ans3
     
-    ans0 = tkinter.Button(window, text=possibilities[played_song][0], command= lambda: check(played_song, possibilities[played_song][0]))
-    ans1 = tkinter.Button(window, text=possibilities[played_song][1], command= lambda: check(played_song, possibilities[played_song][1]))
-    ans2 = tkinter.Button(window, text=possibilities[played_song][2], command= lambda: check(played_song, possibilities[played_song][2]))
-    ans3 = tkinter.Button(window, text=possibilities[played_song][3], command= lambda: check(played_song, possibilities[played_song][3]))
+    ans0 = tkinter.Button(window, text = possibilities[played_song][0], command = lambda: check(played_song, possibilities[played_song][0]))
+    ans1 = tkinter.Button(window, text = possibilities[played_song][1], command = lambda: check(played_song, possibilities[played_song][1]))
+    ans2 = tkinter.Button(window, text = possibilities[played_song][2], command = lambda: check(played_song, possibilities[played_song][2]))
+    ans3 = tkinter.Button(window, text = possibilities[played_song][3], command = lambda: check(played_song, possibilities[played_song][3]))
     ans0.pack()
     ans1.pack()
     ans2.pack()
@@ -41,7 +43,6 @@ def check(correct_ans, tried_title):
     
     if tried_title == correct_ans:
         points=points+1
-        points_lab.configure(text="Points:\n"+str(points)+"\n")
 
     ans0.destroy()
     ans1.destroy()
@@ -50,41 +51,48 @@ def check(correct_ans, tried_title):
 
     cur_song = cur_song+1
 
-    if cur_song < len(songs_list):
-        play_song(songs_list[cur_song])
+    if cur_song < len(questions):
+        play_song(questions[cur_song])
+        points_lab.configure(text = "\nPoints:\n" + str(points) + "/" + str(cur_song) + "\n")
     else:
-        points_lab.config(text="Game ended.\nYou got "+str(points)+" points!")
+        points_lab.config(text="Game ended.\nYou got "+str(points) + "/" + str(cur_song) + " points!")
 
-def play_song(filename):
-    mixer.music.load('probes/easy/'+filename+'.mp3')
-    mixer.music.play()
-    show_buttons(os.path.splitext(filename)[0])
+questions = []
+
+for filename in os.listdir('./probes/easy'):
+    title = os.path.splitext(filename)[0]
+    questions = questions + [Question("easy/", title, possibilities[title])]
+    #songs_list = songs_list+[os.path.splitext(filename)[0]]
+
+for filename in os.listdir('./probes/not_so_easy'):
+    title = os.path.splitext(filename)[0]
+    questions = questions + [Question("not_so_easy/", title, possibilities[title])]
     
-
 points = 0
 cur_song = 0
-songs_list = []
 
 window = tkinter.Tk()
 window.title('Music Quiz - check your music knowledge!')
-window.geometry('500x400')
+window.geometry('500x500')
 
 img = ImageTk.PhotoImage(Image.open("Theme.png"))
 panel = tkinter.Label(window, image = img)
 panel.pack()
 
-info_lab = tkinter.Label(window, text = "Guess the title of the song you hear:\n\n")
+info_lab = tkinter.Label(window, text = "Guess the title of the song you hear\n")
 info_lab.pack()
 
-points_lab = tkinter.Label(window, text = "Points:\n"+str(points)+"\n")
+level_tab = tkinter.Label(window, text = "\n")
+level_tab.pack()
+
+retry_but = tkinter.Button(window, text = 'Reply song')
+retry_but.pack()
+
+points_lab = tkinter.Label(window, text = "\nPoints:\n" + str(points) + "/0\n")
 points_lab.pack()
 
 mixer.init()
 
-for filename in os.listdir('./probes/easy'):
-    songs_list = songs_list+[os.path.splitext(filename)[0]]
-
-play_song(songs_list[0])
+play_song(questions[0])
 
 window.mainloop()
-
