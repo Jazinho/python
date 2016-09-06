@@ -2,7 +2,6 @@ import winsound
 import tkinter
 from PIL import Image,ImageTk
 from SoundsFrequencies import sounds_freq
-#from PreparedMelodies import melodies
 
 def play():
     melodies = {
@@ -14,20 +13,12 @@ def play():
         }
     note = ''
     time = ''
+    
     if str(entry.get()) in melodies:
         zapis = melodies[str(entry.get())]
-        '''
-    if zapis == 'Dla_Elizy':
-        zapis = melodies['Dla_Elizy']
-    if zapis == "Coco_Jumbo":
-        zapis = melodies["Coco_Jumbo"]
-    if zapis == "Wlazł_Kotek":
-        zapis = melodies["Wlazł_Kotek"]
-    if zapis == "Oczy_Zielone":
-        zapis = melodies["Oczy_Zielone"]
-    if zapis == "Get_Get_Down":
-        zapis = melodies["Get_Get_Down"]
-        '''
+    else:
+        zapis = str(entry.get())
+
     for char in zapis:
         if char.isdigit():
             time = time + char
@@ -40,7 +31,7 @@ def play():
     winsound.Beep(sounds_freq[note],int(time))
     note = ''
     time = ''
-    zapis= ''
+    zapis = ''
 
 window = tkinter.Tk()
 window.title('Meldodie maker & Music Challenger')
