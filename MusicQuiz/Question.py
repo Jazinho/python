@@ -1,5 +1,5 @@
 class Question:
-    path = "probes/"
+    path = "resources/"
     def __init__(self, level, title, bad_answers):
          self.level = level
          self.title = title

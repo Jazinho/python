@@ -6,7 +6,7 @@ from Question import *
 from Possibilities import possibilities                
 
 def replay_song(question):
-    mixer.music.load('probes/'+question.level+question.title+'.mp3')
+    mixer.music.load('resources/'+question.level+question.title+'.mp3')
     mixer.music.play()
 
 def play_song(question):
@@ -59,12 +59,12 @@ def check(correct_ans, tried_title):
 
 questions = []
 
-for filename in os.listdir('./probes/easy'):
+for filename in os.listdir('./resources/easy'):
     title = os.path.splitext(filename)[0]
     questions = questions + [Question("easy/", title, possibilities[title])]
     #songs_list = songs_list+[os.path.splitext(filename)[0]]
 
-for filename in os.listdir('./probes/not_so_easy'):
+for filename in os.listdir('./resources/not_so_easy'):
     title = os.path.splitext(filename)[0]
     questions = questions + [Question("not_so_easy/", title, possibilities[title])]
     
@@ -75,7 +75,7 @@ window = tkinter.Tk()
 window.title('Music Quiz - check your music knowledge!')
 window.geometry('500x500')
 
-img = ImageTk.PhotoImage(Image.open("Theme.png"))
+img = ImageTk.PhotoImage(Image.open("resources/Theme.png"))
 panel = tkinter.Label(window, image = img)
 panel.pack()
 
