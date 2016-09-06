@@ -1,5 +1,5 @@
-import winsound
 import tkinter
+import winsound
 from PIL import Image,ImageTk
 from SoundsFrequencies import sounds_freq
 
@@ -33,12 +33,13 @@ def play():
     time = ''
     zapis = ''
 
+
 window = tkinter.Tk()
 window.title('Meldodie maker & Music Challenger')
 window.geometry('700x500')
-window.wm_iconbitmap('favicon.ico')
+window.wm_iconbitmap('resources/favicon.ico')
 
-img = ImageTk.PhotoImage(Image.open("piano_key.png"))
+img = ImageTk.PhotoImage(Image.open("resources/piano_key.png"))
 panel = tkinter.Label(window, image = img)
 panel.pack()
 
