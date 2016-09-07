@@ -87,6 +87,9 @@ def start():
         but.destroy()
         after_game()
 
+#all command below occurs in function duo to possibility of reusing them
+#at the end of game with 'Play again' button
+
 def setup():
     global lvl
     global guesses
