@@ -1,89 +1,7 @@
 import random
 import tkinter
 import sys
-
-drawing={
-        '0':["        ",
-             "        ",
-             "        ",
-             "        ",
-             "        ",
-             "        ",
-             "        ",
-             "        "],
-        '1':["        ",
-             "        ",
-             "        ",
-             "        ",
-             "        ",
-             "        ",
-             "        ",
-             "/ \     "],
-        '2':["        ",
-             "        ",
-             "        ",
-             "        ",
-             "        ",
-             " |      ",
-             " |      ",
-             "/ \     "],
-        '3':["        ",
-             "        ",
-             "        ",
-             " |      ",
-             " |      ",
-             " |      ",
-             " |      ",
-             "/ \     "],
-        '4':["        ",
-             " |      ",
-             " |      ",
-             " |      ",
-             " |      ",
-             " |      ",
-             " |      ",
-             "/ \     "],
-        '5':["  ___   ",
-             " |      ",
-             " |      ",
-             " |      ",
-             " |      ",
-             " |      ",
-             " |      ",
-             "/ \     "],
-        '6':["  ___   ",
-             " |   |  ",
-             "  |  O  ",
-             " |      ",
-             " |      ",
-             " |      ",
-             " |      ",
-             "/ \     "],
-        '7':["  ___   ",
-             " |   |  ",
-             "  |  O  ",
-             " |   |  ",
-             " |      ",
-             " |      ",
-             " |      ",
-             "/ \     "],
-        '8':["  ___   ",
-             " |   |  ",
-             "  |  O  ",
-             "  | /|\ ",
-             " |     ",
-             " |      ",
-             " |      ",
-             "/ \     "],
-        '9':["  ___   ",
-             " |   |  ",
-             "  |  O  ",
-             "  | /|\ ",
-             "  | / \ ",
-             " |      ",
-             " |      ",
-             "/ \     "]
-        }
+from PIL import Image,ImageTk
 
 def after_game():
     again = tkinter.Button(window, text='Play again!',command=lambda: new_game())
@@ -111,12 +29,9 @@ def set_level(num):
     wprow_lab.pack()
 
 def draw(num):
-    i=0
-    txt=''
-    for i in range(8):
-        txt=txt+str(drawing[str(num)][i])+'\n'
-        i=i+1
-    glob_label.configure(text=''+txt)
+    img = ImageTk.PhotoImage(Image.open("resources/"+str(num)+".png"))
+    glob_label.configure(image=img)
+    glob_label.image=img
 
 # main loop: reading entry letter, checking its occurence in solution,
 # priting solution, drawing the drawing.
@@ -206,19 +121,20 @@ def setup():
     choice1 = tkinter.Button(window, text='Łatwy',command=lambda: set_level(1))
     choice2 = tkinter.Button(window, text='Średni',command=lambda: set_level(2))
     choice3 = tkinter.Button(window, text='Trudny',command=lambda: set_level(3))
-    window.geometry('400x500')
+    window.geometry('500x500')
     window.title('Gra Wisielec')
 
     pom = tkinter.Label(window, text='')
     pom.pack()
 
-    lbl = tkinter.Label(window, text='Wybierz poziom trudności:\n')
-
     pom2 = tkinter.Label(window, text='')
     pom2.pack()
 
-    glob_label = tkinter.Label(window, text=' \n\n\n\n\n\n\n\n')
+    img = ImageTk.PhotoImage(Image.open("resources/0.png"))
+    glob_label = tkinter.Label(window, image = img)
     glob_label.pack()
+
+    lbl = tkinter.Label(window, text='Wybierz poziom trudności:\n')
     lbl.pack()
 
     choice1.pack()
@@ -238,8 +154,6 @@ def setup():
     wprow = 'Sprawdzono: '
     wprow_lab = tkinter.Label(window, text=wprow)
 
-    window.mainloop()
-
 #global variables and starting program
 lines_from_file=''
 lvl=0
@@ -251,3 +165,5 @@ game_on = True
 step_to_death=True
 
 setup()
+
+window.mainloop()
