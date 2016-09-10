@@ -55,14 +55,16 @@ def check(correct_ans, tried_title):
         play_song(questions[cur_song])
         points_lab.configure(text = "\nPoints:\n" + str(points) + "/" + str(cur_song) + "\n")
     else:
-        points_lab.config(text="Game ended.\nYou got "+str(points) + "/" + str(cur_song) + " points!")
+        retry_but.destroy()
+        info_lab.destroy()
+        level_tab.destroy()
+        points_lab.config(text="Game ended.\nYou got "+str(points) + "/" + str(cur_song) + " points!", font=("Helvetica", 26))
 
 questions = []
 
 for filename in os.listdir('./resources/easy'):
     title = os.path.splitext(filename)[0]
     questions = questions + [Question("easy/", title, possibilities[title])]
-    #songs_list = songs_list+[os.path.splitext(filename)[0]]
 
 for filename in os.listdir('./resources/not_so_easy'):
     title = os.path.splitext(filename)[0]
@@ -85,7 +87,7 @@ info_lab.pack()
 level_tab = tkinter.Label(window, text = "\n")
 level_tab.pack()
 
-retry_but = tkinter.Button(window, text = 'Reply song')
+retry_but = tkinter.Button(window, text = 'Replay song')
 retry_but.pack()
 
 points_lab = tkinter.Label(window, text = "\nPoints:\n" + str(points) + "/0\n")
