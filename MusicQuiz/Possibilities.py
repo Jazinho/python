@@ -24,5 +24,9 @@ possibilities={
     'The Flood':['Canoying','Hollywood','Supreme','The Flood'],
     'The Weekend':['Celebrate','Party Time','The Weekend','Take a Chance'],
     'W porownaniu':['W porownaniu','Wszyscy to wiedzą','Wielki Tenis','Radość'],
-    'You Don\'t Fool Me':['Hammer to Fall','You Don\'t Fool Me','Love Kills','Another One Bites the Dust']
+    'You Don\'t Fool Me':['Hammer to Fall','You Don\'t Fool Me','Love Kills','Another One Bites the Dust'],
+    'I\'m a believer':['I\'m a believer', 'Can\'t Stop Me', 'Beverly Hills', 'Murphy'],
+    'Teo And Tea':['Oxygen', 'Teo And Tea', 'Outer Space', 'Michelle'],
+    'Hound dog':['No More', 'Little Less Conversation', 'Hound dog', 'Rock This House'],
+    'Hiszpan':['Corrida', 'Guitar Tango', 'Byk', 'Hiszpan']
     }
