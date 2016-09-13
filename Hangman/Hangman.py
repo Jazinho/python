@@ -1,6 +1,5 @@
 import random
 import tkinter
-import sys
 from PIL import Image,ImageTk
 
 def after_game():
@@ -33,19 +32,13 @@ def draw(num):
     glob_label.configure(image=img)
     glob_label.image=img
 
-# main loop: reading entry letter, checking its occurence in solution,
-# priting solution, drawing the drawing.
-
-def start():
+def check_letter():
     global guesses
     global wprow
     global wyswietlane_haslo
     global zgadniete_litery
     global game_on
-    #global step_to_death
     global wprow
-    
-#Read entry and check if it's in solutions string
     
     step_to_death=True
     podana = entry.get()
@@ -75,8 +68,7 @@ def start():
         entry.destroy()
         but.destroy()
         after_game()
-        
-#Draw next step only if user guessed wrong
+
     if step_to_death:
         guesses+=1
 
@@ -90,9 +82,6 @@ def start():
         entry.destroy()
         but.destroy()
         after_game()
-
-#all command below occurs in function due to possibility of reusing them
-#at the end of game with 'Play again' option
 
 def setup():
     global lvl
@@ -155,7 +144,7 @@ def setup():
     info.pack()
 
     entry = tkinter.Entry(window)
-    but = tkinter.Button(window, text='Check!',command=lambda: start())
+    but = tkinter.Button(window, text='Check!',command=lambda: check_letter())
     wprow = ''
     wprow_lab = tkinter.Label(window, text="Sprawdzono:" + wprow)
 	
