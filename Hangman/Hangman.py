@@ -86,7 +86,7 @@ def start():
     step_to_death = True
     
     if(guesses==9):
-        info.configure(text='*** PRZEGRAŁEŚ ***\n* WIESIEK ZAWISŁ *')
+        info.configure(text='*** PRZEGRAŁEŚ ***\n* WIESIEK ZAWISŁ *\n\nSzukanym słowem było słowo: ' + slowo)
         entry.destroy()
         but.destroy()
         after_game()
