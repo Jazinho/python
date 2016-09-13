@@ -1,3 +1,5 @@
+#!C:\Python34\python.exe
+
 import random
 import tkinter
 from PIL import Image,ImageTk
