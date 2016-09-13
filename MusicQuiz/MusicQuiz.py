@@ -1,3 +1,5 @@
+#!C:\Python34\python.exe
+
 import tkinter
 import os
 from pygame import mixer
