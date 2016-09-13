@@ -40,24 +40,28 @@ def start():
     global guesses
     global wprow
     global wyswietlane_haslo
-    global guessed_letters
+    global zgadniete_litery
     global game_on
-    global step_to_death
+    #global step_to_death
     global wprow
     
 #Read entry and check if it's in solutions string
     
-    char = entry.get()
+    step_to_death=True
+    podana = entry.get()
     entry.delete(0)
-    guessed_letters = guessed_letters + char
-    wprow = wprow + ' ' + str(char)
-    wprow_lab.configure(text = wprow)
+    zgadniete_litery = zgadniete_litery + podana
+	
+    if podana in slowo or podana in wprow:
+        step_to_death=False
+			
+    wprow = wprow + ' ' + podana
+    wprow_lab.configure(text = "Sprawdzono:" + wprow)
 
     wyswietlane_haslo=''
+	
     for letter in slowo:
-        if char == letter:
-            step_to_death=False
-        if char == letter or letter in guessed_letters:
+        if podana == letter or letter in zgadniete_litery:
             wyswietlane_haslo = wyswietlane_haslo + letter + ' '
         else:
             if letter != '\n':
@@ -87,17 +91,16 @@ def start():
         but.destroy()
         after_game()
 
-#all command below occurs in function duo to possibility of reusing them
-#at the end of game with 'Play again' button
+#all command below occurs in function due to possibility of reusing them
+#at the end of game with 'Play again' option
 
 def setup():
     global lvl
     global guesses
     global wyswietlane_haslo
     global slowo
-    global guessed_letters
+    global zgadniete_litery
     global game_on
-    global step_to_death
     global choice1
     global choice2
     global choice3
@@ -116,14 +119,10 @@ def setup():
     guesses=0
     wyswietlane_haslo = ''
     slowo = ''
-    guessed_letters=''
+    zgadniete_litery=''
     game_on = True
-    step_to_death=True
 
     window = tkinter.Tk()
-    choice1 = tkinter.Button(window, text='Łatwy',command=lambda: set_level(1))
-    choice2 = tkinter.Button(window, text='Średni',command=lambda: set_level(2))
-    choice3 = tkinter.Button(window, text='Trudny',command=lambda: set_level(3))
     window.geometry('500x500')
     window.title('Gra Wisielec')
 
@@ -140,6 +139,9 @@ def setup():
     lbl = tkinter.Label(window, text='Wybierz poziom trudności:\n')
     lbl.pack()
 
+    choice1 = tkinter.Button(window, text='Łatwy',command=lambda: set_level(1))
+    choice2 = tkinter.Button(window, text='Średni',command=lambda: set_level(2))
+    choice3 = tkinter.Button(window, text='Trudny',command=lambda: set_level(3))
     choice1.pack()
     choice2.pack()
     choice3.pack()
@@ -154,8 +156,11 @@ def setup():
 
     entry = tkinter.Entry(window)
     but = tkinter.Button(window, text='Check!',command=lambda: start())
-    wprow = 'Sprawdzono: '
-    wprow_lab = tkinter.Label(window, text=wprow)
+    wprow = ''
+    wprow_lab = tkinter.Label(window, text="Sprawdzono:" + wprow)
+	
+    #draw initial picture
+    draw(guesses)
 
 #global variables and starting program
 lines_from_file=''
@@ -163,9 +168,8 @@ lvl=0
 guesses=0
 wyswietlane_haslo = ''
 slowo = ''
-guessed_letters=''
+zgadniete_litery=''
 game_on = True
-step_to_death=True
 
 setup()
 
