@@ -135,10 +135,10 @@ def setup():
     choice2.pack()
     choice3.pack()
 
-    f=open('Base.txt','r')
+    f=open('resources/Base.txt','r')
     lines_from_file = f.readlines()
     random.seed()
-    rand = random.randint(0,3)
+    rand = random.randint(0,9)
 
     info = tkinter.Label(window, text='\nZgadnij jaka litera znajduje sie w słowie-rozwiązaniu.\nKażda kolejna nietrafiona próba to krok do śmierci wisielca...')
     info.pack()
