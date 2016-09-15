@@ -1,4 +1,5 @@
 import tkinter
+import time
 
 def clear():
     login = ent_login.get()
@@ -6,6 +7,16 @@ def clear():
     ent_login.delete(0, 'end')
     ent_pass.delete(0, 'end')
     lbl_info.pack()
+
+def update():
+    global label,photo,i,window
+
+    if(i==20):
+        i=0
+    photo = tkinter.PhotoImage(file = '10sec_loading_bar.gif', format="gif -index "+str(i))
+    label.configure(image = photo)
+    i=i+1
+    window.after(500,update)
 
 window = tkinter.Tk()
 
@@ -34,6 +45,13 @@ lbl_pass.pack()
 ent_pass.pack()
 btn.pack()
 
+photo = tkinter.PhotoImage(file = '10sec_loading_bar.gif')
+label = tkinter.Label(window, image = photo)
+label.pack()
+
+i=1
+window.after(500, update)
+
 window.mainloop()
-    
- 
+
+
