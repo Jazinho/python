@@ -2,22 +2,40 @@
 
 import tkinter
 import os
-from pygame import mixer
+import pygame
+from pygame import *
 from PIL import Image,ImageTk
 from Question import *
-from Possibilities import possibilities                
+from Possibilities import possibilities
+import time            
 
 def replay_song(question):
     mixer.music.load('resources/'+question.level+question.title+'.mp3')
     mixer.music.play()
 
+def update():
+    global label,photo,i,window
+
+    if(i==19):
+        return
+    photo = tkinter.PhotoImage(file = 'resources/10sec_loading_bar.gif', format="gif -index "+str(i))
+    label.configure(image = photo)
+    i=i+1
+    window.after(500,update)
+    
+def end_song():
+    mixer.music.pause()
+    
 def play_song(question):
+    window.after(500, update)
+	
     if question.level == "easy/":
         level_tab.configure(text = "Level: Easy\n")
     else:
         level_tab.configure(text = "Level: Hard\n")
     mixer.music.load(Question.path + question.level + question.title + '.mp3')
     mixer.music.play()
+    window.after(10000, end_song)
     retry_but.configure(command = lambda: replay_song(question))
     show_buttons(question.title)
     
@@ -40,8 +58,9 @@ def check(correct_ans, tried_title):
     global played_song
     global points
     global cur_song
+    global i
 
-    mixer.music.pause()
+    end_song()
     
     if tried_title == correct_ans:
         points=points+1
@@ -50,6 +69,10 @@ def check(correct_ans, tried_title):
     ans1.destroy()
     ans2.destroy()
     ans3.destroy()
+
+    i=1
+    photo = tkinter.PhotoImage(file = 'resources/10sec_loading_bar.gif', format="gif -index "+str(i))
+    label.configure(image = photo)
 
     cur_song = cur_song+1
 
@@ -61,6 +84,8 @@ def check(correct_ans, tried_title):
         info_lab.destroy()
         level_tab.destroy()
         points_lab.config(text="Game ended.\nYou got "+str(points) + "/" + str(cur_song) + " points!", font=("Helvetica", 26))
+
+#mainloop
 
 questions = []
 
@@ -94,6 +119,11 @@ retry_but.pack()
 
 points_lab = tkinter.Label(window, text = "\nPoints:\n" + str(points) + "/0\n")
 points_lab.pack()
+
+photo = tkinter.PhotoImage(file = 'resources/10sec_loading_bar.gif')
+label = tkinter.Label(window, image = photo)
+label.pack()
+i=1
 
 mixer.init()
 
