@@ -2,12 +2,10 @@
 
 import tkinter
 import os
-import pygame
-from pygame import *
+from pygame import mixer
 from PIL import Image,ImageTk
 from Question import *
-from Possibilities import possibilities
-import time            
+from Possibilities import possibilities 
 
 def replay_song(question):
     global gif_step
