@@ -8,8 +8,7 @@ from Question import *
 from Possibilities import possibilities 
 
 def replay_song(question):
-    global gif_step
-    global song_id
+    global gif_step,song_id
 
     mixer.music.load('resources/'+question.level+question.title+'.mp3')
     mixer.music.play()
@@ -51,10 +50,7 @@ def play_song(question):
     show_buttons(question.title)
     
 def show_buttons(played_song):
-    global ans0
-    global ans1
-    global ans2
-    global ans3
+    global ans0,ans1,ans2,ans3
     
     ans0 = tkinter.Button(window, text = possibilities[played_song][0], command = lambda: check(played_song, possibilities[played_song][0]))
     ans1 = tkinter.Button(window, text = possibilities[played_song][1], command = lambda: check(played_song, possibilities[played_song][1]))
@@ -66,11 +62,7 @@ def show_buttons(played_song):
     ans3.pack()
 
 def check(correct_ans, tried_title):
-    global played_song
-    global points
-    global cur_song
-    global gif_step
-    global song_switched_flag
+    global played_song,points,cur_song,gif_step,song_switched_flag
 
     end_song()
     window.after_cancel(song_id)
