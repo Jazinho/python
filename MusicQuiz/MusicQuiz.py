@@ -10,23 +10,36 @@ from Possibilities import possibilities
 import time            
 
 def replay_song(question):
+    global gif_step
+    global song_id
+
     mixer.music.load('resources/'+question.level+question.title+'.mp3')
     mixer.music.play()
+    if(gif_step==20):
+        window.after(500, update)
+    gif_step=1
+    window.after_cancel(song_id)
+    song_id = window.after(10000, end_song)
 
 def update():
-    global label,photo,i,window
+    global label,photo,gif_step,window, song_switched_flag
 
-    if(i==19):
+    if(song_switched_flag or gif_step==20):
+        song_switched_flag = False
         return
-    photo = tkinter.PhotoImage(file = 'resources/10sec_loading_bar.gif', format="gif -index "+str(i))
+
+    photo = tkinter.PhotoImage(file = 'resources/10sec_loading_bar.gif', format="gif -index "+str(gif_step))
     label.configure(image = photo)
-    i=i+1
+    gif_step=gif_step+1
+
     window.after(500,update)
     
 def end_song():
     mixer.music.pause()
     
 def play_song(question):
+    global song_id
+
     window.after(500, update)
 	
     if question.level == "easy/":
@@ -35,7 +48,7 @@ def play_song(question):
         level_tab.configure(text = "Level: Hard\n")
     mixer.music.load(Question.path + question.level + question.title + '.mp3')
     mixer.music.play()
-    window.after(10000, end_song)
+    song_id = window.after(10000, end_song)
     retry_but.configure(command = lambda: replay_song(question))
     show_buttons(question.title)
     
@@ -58,9 +71,11 @@ def check(correct_ans, tried_title):
     global played_song
     global points
     global cur_song
-    global i
+    global gif_step
+    global song_switched_flag
 
     end_song()
+    window.after_cancel(song_id)
     
     if tried_title == correct_ans:
         points=points+1
@@ -70,8 +85,11 @@ def check(correct_ans, tried_title):
     ans2.destroy()
     ans3.destroy()
 
-    i=1
-    photo = tkinter.PhotoImage(file = 'resources/10sec_loading_bar.gif', format="gif -index "+str(i))
+    if(gif_step<20):
+        song_switched_flag=True
+
+    gif_step=1
+    photo = tkinter.PhotoImage(file = 'resources/10sec_loading_bar.gif', format="gif -index "+str(gif_step))
     label.configure(image = photo)
 
     cur_song = cur_song+1
@@ -99,6 +117,9 @@ for filename in os.listdir('./resources/not_so_easy'):
     
 points = 0
 cur_song = 0
+gif_step=1
+song_switched_flag=False
+song_id=''
 
 window = tkinter.Tk()
 window.title('Music Quiz - check your music knowledge!')
@@ -123,7 +144,6 @@ points_lab.pack()
 photo = tkinter.PhotoImage(file = 'resources/10sec_loading_bar.gif')
 label = tkinter.Label(window, image = photo)
 label.pack()
-i=1
 
 mixer.init()
 
