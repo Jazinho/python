@@ -34,13 +34,14 @@ def play():
     zapis = ''
 
 
+
 window = tkinter.Tk()
 window.title('Meldodie maker & Music Challenger')
 window.geometry('700x500')
 window.wm_iconbitmap('resources/favicon.ico')
 
-img = ImageTk.PhotoImage(Image.open("resources/piano_key.png"))
-panel = tkinter.Label(window, image = img)
+img = ImageTk.PhotoImage(file = "resources/piano_key.png")
+panel = tkinter.Label(window, image = img) 
 panel.pack()
 
 info = tkinter.Label(window, text = '\nWprowadź oznaczenie nuty oraz długość dźwieku w milisekundach, aby zagrać dany dźwięk.\nAby zagrać melodię wprowadź całą sekwencję, np. e200 g300 h#100.\nCiszę oznaczono jako \'sil\'\n')
@@ -53,4 +54,3 @@ melodies = tkinter.Label(window, text="\nBy odegrać gotowe melodie, wpisz poni�
 melodies.pack()
 
 window.mainloop()
-
